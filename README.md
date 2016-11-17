@@ -1,5 +1,5 @@
 # SMPatcher
-Applies patches to Pokemon Sun/Moon code.bin from [SunMoonPatches](https://github.com/SciresM/SunMoonPatches)
+Applies patches to Pokemon Sun/Moon code.bin from [SunMoonPatches](https://github.com/SciresM/SunMoonPatches).
 
 
 **Licensing:**
