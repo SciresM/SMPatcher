@@ -83,9 +83,19 @@ namespace SMPatcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] moon_hash {
+        internal static byte[] moon_hash_1_0 {
             get {
-                object obj = ResourceManager.GetObject("moon_hash", resourceCulture);
+                object obj = ResourceManager.GetObject("moon_hash_1_0", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] moon_hash_1_1 {
+            get {
+                object obj = ResourceManager.GetObject("moon_hash_1_1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -103,9 +113,19 @@ namespace SMPatcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] sun_hash {
+        internal static byte[] sun_hash_1_0 {
             get {
-                object obj = ResourceManager.GetObject("sun_hash", resourceCulture);
+                object obj = ResourceManager.GetObject("sun_hash_1_0", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] sun_hash_1_1 {
+            get {
+                object obj = ResourceManager.GetObject("sun_hash_1_1", resourceCulture);
                 return ((byte[])(obj));
             }
         }

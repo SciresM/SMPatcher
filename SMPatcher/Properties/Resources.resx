@@ -124,13 +124,19 @@
   <data name="debug_stub" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\byte\debug_stub.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="moon_hash" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\byte\moon_hash;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="moon_hash_1_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\moon_hash_1_0;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="moon_hash_1_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\moon_hash_1_1;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="qr_is_registered" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\byte\qr_is_registered;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="sun_hash" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\byte\sun_hash;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="sun_hash_1_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\sun_hash_1_0;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="sun_hash_1_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\sun_hash_1_1;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
