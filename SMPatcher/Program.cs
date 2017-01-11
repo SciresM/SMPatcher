@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
+using CodeIsle.LibIpsNet;
+
 using SMPatcher.Properties;
 
 namespace SMPatcher
@@ -128,6 +130,18 @@ namespace SMPatcher
             }
         }
 
+        static byte[] CreateIPS(byte[] source, byte[] modified)
+        {
+            using (var s = new MemoryStream(source))
+            using (var m = new MemoryStream(modified))
+            using (var o = new MemoryStream())
+            {
+                var Creator = new Creator();
+                Creator.Create(s, m, o);
+                return o.ToArray();
+            }
+        }
+
         static void Main(string[] args)
         {
             var Offsets = new Offsets();
@@ -149,6 +163,8 @@ namespace SMPatcher
                 Console.WriteLine("Failed to open {0}!", args[0]);
                 return;
             }
+
+            var old_code = (byte[]) code.Clone();
 
             var dir = Path.GetDirectoryName(args[0]);
             var fn = Path.GetFileNameWithoutExtension(args[0]);
@@ -213,13 +229,17 @@ namespace SMPatcher
 
             Console.WriteLine("Patched!");
             var new_fn = Path.Combine(dir, fn + "_patched.bin");
+            var nfn_ips = Path.Combine(dir, fn + "_patched.ips");
             File.WriteAllBytes(new_fn, code);
+            File.WriteAllBytes(nfn_ips, CreateIPS(old_code, code));
             Console.WriteLine("Saved to {0}!", new_fn);
+
 
             BitConverter.GetBytes(0xE320F000).CopyTo(code, Offsets.NoOutlines);
             var nfn2 = Path.Combine(dir, fn + "_patched_nooutlines.bin");
+            var nfn2_ips = Path.Combine(dir, fn + "_patched_nooutlines.ips");
             File.WriteAllBytes(nfn2, code);
-
+            File.WriteAllBytes(nfn2_ips, CreateIPS(old_code, code));
         }
     }
 }
