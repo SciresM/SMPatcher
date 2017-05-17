@@ -91,6 +91,31 @@ namespace SMPatcher
             GetSingletonAccessorInstance = 0x48B4
         };
 
+        private static readonly Offsets Offsets_1_2 = new Offsets
+        {
+            CTRIsDebugMode = 0x4DE0,
+
+            DecryptQRCodeStart = 0x2CEA3C,
+            DecryptQRCodeEnd = 0x2CEAD4,
+
+            AnalyzeQRBinaryStart = 0x2CED90,
+            AnalyzeQRBinaryEnd = 0x2CF214,
+            QRReaderSaveDataBatteryQuery = 0x33F6B0,
+
+            QRReaderSaveDataIsRegisteredData = 0x3A8DD0,
+
+            ForbiddenQRs = 0x4A5FF0,
+
+            NoOutlines = 0x31CFCC,
+
+            CRC16 = 0x259D14,
+            DexDataAllocator = 0x3B6730,
+            aeabi_memcpy = 0x1FEBD8,
+            GenerateDexDisplayData = 0x2CE714,
+
+            GetSingletonAccessorInstance = 0x48B4
+        };
+
         static uint GetARMBranch(uint from, uint to)
         {
             // Fuck ARM Branches
@@ -169,7 +194,7 @@ namespace SMPatcher
             var dir = Path.GetDirectoryName(args[0]);
             var fn = Path.GetFileNameWithoutExtension(args[0]);
 
-            Console.WriteLine("Sun/Moon Patcher v1.1 - SciresM");
+            Console.WriteLine("Sun/Moon Patcher v1.2 - SciresM");
 
             var hash = (new SHA256CryptoServiceProvider()).ComputeHash(code);
             if (hash.SequenceEqual(Resources.moon_hash_1_0))
@@ -182,6 +207,11 @@ namespace SMPatcher
                 Console.WriteLine("Pokemon Moon v1.1 detected.");
                 Offsets = Offsets_1_1;
             }
+            else if (hash.SequenceEqual(Resources.moon_hash_1_2))
+            {
+                Console.WriteLine("Pokemon Moon v1.2 detected.");
+                Offsets = Offsets_1_2;
+            }
             else if (hash.SequenceEqual(Resources.sun_hash_1_0))
             {
                 Console.WriteLine("Pokemon Sun v1.0 detected");
@@ -191,6 +221,11 @@ namespace SMPatcher
             {
                 Console.WriteLine("Pokemon Sun v1.1 detected");
                 Offsets = Offsets_1_1;
+            }
+            else if (hash.SequenceEqual(Resources.sun_hash_1_2))
+            {
+                Console.WriteLine("Pokemon Sun v1.2 detected");
+                Offsets = Offsets_1_2;
             }
             else
             {

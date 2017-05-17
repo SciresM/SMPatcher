@@ -67,9 +67,11 @@
     <None Include="Resources\byte\debug_stub.bin" />
     <None Include="Resources\byte\moon_hash_1_0" />
     <None Include="Resources\byte\moon_hash_1_1" />
+    <None Include="Resources\byte\moon_hash_1_2" />
     <None Include="Resources\byte\qr_is_registered" />
     <None Include="Resources\byte\sun_hash_1_0" />
     <None Include="Resources\byte\sun_hash_1_1" />
+    <None Include="Resources\byte\sun_hash_1_2" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
