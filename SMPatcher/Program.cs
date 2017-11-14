@@ -312,10 +312,12 @@ namespace SMPatcher
             {
                 for (var i = 0; i < Resources.qr_is_registered.Length; i += 4)
                 {
-                    if (BitConverter.ToUInt32(Resources.qr_is_registered, i) == 0xE28CCE31) // ADD R12, R12, #0x310
+                    if (BitConverter.ToUInt32(Resources.qr_is_registered, i) == 0xE28CCB0F) // ADD R12, R12, #0x3C00
                     {
-                        // ADD R12, R12, #0x4A0 (+0x190 to box base in USUM vs SM)
-                        BitConverter.GetBytes(0xE28CCE4A).CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData + i);
+                        // ADD R12, R12, #0x4100
+                        // ADD R12, R12, #0x88 (+0x190+0xE8 to box base in USUM vs SM)
+                        BitConverter.GetBytes(0xE28CCC41).CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData + i);
+                        BitConverter.GetBytes(0xE28CC088).CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData + i + 4);
                     }
                 }
             }
