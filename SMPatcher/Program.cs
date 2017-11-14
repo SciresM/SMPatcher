@@ -35,6 +35,8 @@ namespace SMPatcher
         public uint GenerateDexDisplayData;
 
         public uint GetSingletonAccessorInstance;
+
+        public bool IsUltra;
     }
 
 
@@ -63,7 +65,9 @@ namespace SMPatcher
             aeabi_memcpy = 0x1FEC20,
             GenerateDexDisplayData = 0x2CD230,
 
-            GetSingletonAccessorInstance = 0x48B4
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = false
         };
 
         private static readonly Offsets Offsets_1_1 = new Offsets
@@ -88,7 +92,9 @@ namespace SMPatcher
             aeabi_memcpy = 0x1FEBD8,
             GenerateDexDisplayData = 0x2CE714,
 
-            GetSingletonAccessorInstance = 0x48B4
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = false
         };
 
         private static readonly Offsets Offsets_1_2 = new Offsets
@@ -113,7 +119,36 @@ namespace SMPatcher
             aeabi_memcpy = 0x1FEBD8,
             GenerateDexDisplayData = 0x2CE714,
 
-            GetSingletonAccessorInstance = 0x48B4
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = false
+        };
+
+        private static readonly Offsets Ultra_Offsets_1_0 = new Offsets
+        {
+            CTRIsDebugMode = 0x4DE0,
+
+            DecryptQRCodeStart = 0x2DEEA0,
+            DecryptQRCodeEnd = 0x2DEF38,
+
+            AnalyzeQRBinaryStart = 0x2DF364,
+            AnalyzeQRBinaryEnd = 0x2DF8DC,
+            QRReaderSaveDataBatteryQuery = 0x353864,
+
+            QRReaderSaveDataIsRegisteredData = 0x3C3D24,
+
+            ForbiddenQRs = 0x4CC724,
+
+            NoOutlines = 0x32E2B8,
+
+            CRC16 = 0x261534,
+            DexDataAllocator = 0x5500,
+            aeabi_memcpy = 0x1FED44,
+            GenerateDexDisplayData = 0x2DEB80,
+
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = true
         };
 
         static uint GetARMBranch(uint from, uint to)
@@ -194,7 +229,7 @@ namespace SMPatcher
             var dir = Path.GetDirectoryName(args[0]);
             var fn = Path.GetFileNameWithoutExtension(args[0]);
 
-            Console.WriteLine("Sun/Moon Patcher v1.2 - SciresM");
+            Console.WriteLine("Sun/Moon Patcher v1.3 - SciresM");
 
             var hash = (new SHA256CryptoServiceProvider()).ComputeHash(code);
             if (hash.SequenceEqual(Resources.moon_hash_1_0))
@@ -227,6 +262,16 @@ namespace SMPatcher
                 Console.WriteLine("Pokemon Sun v1.2 detected");
                 Offsets = Offsets_1_2;
             }
+            else if (hash.SequenceEqual(Resources.ultra_moon_hash_1_0))
+            {
+                Console.WriteLine("Pokemon Ultra Moon v1.0 detected");
+                Offsets = Ultra_Offsets_1_0;
+            }
+            else if (hash.SequenceEqual(Resources.ultra_sun_hash_1_0))
+            {
+                Console.WriteLine("Pokemon Ultra Sun v1.0 detected");
+                Offsets = Ultra_Offsets_1_0;
+            }
             else
             {
                 Console.WriteLine("Unknown code.bin! Contact SciresM to update the program.");
@@ -234,9 +279,47 @@ namespace SMPatcher
             }
 
             Resources.debug_stub.CopyTo(code, Offsets.CTRIsDebugMode);
+
+            if (Offsets.IsUltra) // Patch up static memory clobber.
+            {
+                for (var i = 0; i < Resources.debug_stub.Length; i += 4)
+                {
+                    if (BitConverter.ToUInt32(Resources.debug_stub, i) == 0x006A1080)
+                    {
+                        BitConverter.GetBytes(0x00667180).CopyTo(code, Offsets.CTRIsDebugMode + i);
+                    }
+                }
+            }
             Resources.battery_save.CopyTo(code, Offsets.QRReaderSaveDataBatteryQuery);
+            if (Offsets.IsUltra) // Patch up Stack reads.
+            {
+                for (var i = 0; i < Resources.battery_save.Length; i += 4)
+                {
+                    if (BitConverter.ToUInt32(Resources.battery_save, i) == 0xE59D70B0) // LDR R7, [SP, #0xB0]
+                    {
+                        // LDR R7, [SP, #0xC0]
+                        BitConverter.GetBytes(0xE59D70C0).CopyTo(code, Offsets.QRReaderSaveDataBatteryQuery + i);
+                    }
+                    else if (BitConverter.ToUInt32(Resources.battery_save, i) == 0xE59D1088) // LDR R1, [SP, #0x88]
+                    {
+                        // LDR R1, [SP, #0x98]
+                        BitConverter.GetBytes(0xE59D1098).CopyTo(code, Offsets.QRReaderSaveDataBatteryQuery + i);
+                    } 
+                }
+            }
             Resources.qr_is_registered.CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData);
-            new byte[0x24].CopyTo(code, Offsets.ForbiddenQRs);
+            if (Offsets.IsUltra) // Patch up Box offset
+            {
+                for (var i = 0; i < Resources.qr_is_registered.Length; i += 4)
+                {
+                    if (BitConverter.ToUInt32(Resources.qr_is_registered, i) == 0xE28CCE31) // ADD R12, R12, #0x310
+                    {
+                        // ADD R12, R12, #0x4A0 (+0x190 to box base in USUM vs SM)
+                        BitConverter.GetBytes(0xE28CCE4A).CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData + i);
+                    }
+                }
+            }
+            new byte[Offsets.IsUltra ? 0x30 : 0x24].CopyTo(code, Offsets.ForbiddenQRs);
 
             // Fix relative jumps within shellcode
             // QR Decryption Jumps

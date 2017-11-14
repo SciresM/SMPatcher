@@ -72,6 +72,8 @@
     <None Include="Resources\byte\sun_hash_1_0" />
     <None Include="Resources\byte\sun_hash_1_1" />
     <None Include="Resources\byte\sun_hash_1_2" />
+    <None Include="Resources\byte\ultra_moon_hash_1_0" />
+    <None Include="Resources\byte\ultra_sun_hash_1_0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
