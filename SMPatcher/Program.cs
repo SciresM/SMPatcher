@@ -356,7 +356,7 @@ namespace SMPatcher
             else if (hash.SequenceEqual(Resources.ultra_sun_hash_1_0))
             {
                 Console.WriteLine("Pokemon Ultra Sun v1.0 detected");
-                Offsets = UltraM_Offsets_1_0;
+                Offsets = UltraS_Offsets_1_0;
             }
             else if (hash.SequenceEqual(Resources.ultra_moon_hash_1_1))
             {
@@ -366,7 +366,7 @@ namespace SMPatcher
             else if (hash.SequenceEqual(Resources.ultra_sun_hash_1_1))
             {
                 Console.WriteLine("Pokemon Ultra Sun v1.1 detected");
-                Offsets = UltraM_Offsets_1_1;
+                Offsets = UltraS_Offsets_1_1;
             }
             else
             {
