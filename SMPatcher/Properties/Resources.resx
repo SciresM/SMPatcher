@@ -148,7 +148,13 @@
   <data name="ultra_moon_hash_1_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\byte\ultra_moon_hash_1_0;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ultra_moon_hash_1_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\ultra_moon_hash_1_1;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ultra_sun_hash_1_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\byte\ultra_sun_hash_1_0;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ultra_sun_hash_1_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\byte\ultra_sun_hash_1_1;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

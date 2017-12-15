@@ -37,6 +37,7 @@ namespace SMPatcher
         public uint GetSingletonAccessorInstance;
 
         public bool IsUltra;
+        public bool IsUltraV1_1;
     }
 
 
@@ -67,7 +68,8 @@ namespace SMPatcher
 
             GetSingletonAccessorInstance = 0x48B4,
 
-            IsUltra = false
+            IsUltra = false,
+            IsUltraV1_1 = false
         };
 
         private static readonly Offsets Offsets_1_1 = new Offsets
@@ -94,7 +96,8 @@ namespace SMPatcher
 
             GetSingletonAccessorInstance = 0x48B4,
 
-            IsUltra = false
+            IsUltra = false,
+            IsUltraV1_1 = false
         };
 
         private static readonly Offsets Offsets_1_2 = new Offsets
@@ -121,10 +124,11 @@ namespace SMPatcher
 
             GetSingletonAccessorInstance = 0x48B4,
 
-            IsUltra = false
+            IsUltra = false,
+            IsUltraV1_1 = false
         };
 
-        private static readonly Offsets Ultra_Offsets_1_0 = new Offsets
+        private static readonly Offsets UltraM_Offsets_1_0 = new Offsets
         {
             CTRIsDebugMode = 0x4DE0,
 
@@ -148,12 +152,96 @@ namespace SMPatcher
 
             GetSingletonAccessorInstance = 0x48B4,
 
-            IsUltra = true
+            IsUltra = true,
+            IsUltraV1_1 = false
+        };
+
+        private static readonly Offsets UltraS_Offsets_1_0 = new Offsets
+        {
+            CTRIsDebugMode = 0x4DE0,
+
+            DecryptQRCodeStart = 0x2DEE9C,
+            DecryptQRCodeEnd = 0x2DEF34,
+
+            AnalyzeQRBinaryStart = 0x2DF360,
+            AnalyzeQRBinaryEnd = 0x2DF8D8,
+            QRReaderSaveDataBatteryQuery = 0x353860,
+
+            QRReaderSaveDataIsRegisteredData = 0x3C3D1C,
+
+            ForbiddenQRs = 0x4CC724,
+
+            NoOutlines = 0x32E2B4,
+
+            CRC16 = 0x261534,
+            DexDataAllocator = 0x5500,
+            aeabi_memcpy = 0x1FED44,
+            GenerateDexDisplayData = 0x2DEB7C,
+
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = true,
+            IsUltraV1_1 = false
+        };
+
+        private static readonly Offsets UltraM_Offsets_1_1 = new Offsets
+        {
+            CTRIsDebugMode = 0x4DE0,
+
+            DecryptQRCodeStart = 0x2E03B0,
+            DecryptQRCodeEnd = 0x2E0448,
+
+            AnalyzeQRBinaryStart = 0x2E0874,
+            AnalyzeQRBinaryEnd = 0x2E0DEC,
+            QRReaderSaveDataBatteryQuery = 0x3553A8,
+
+            QRReaderSaveDataIsRegisteredData = 0x3C5A04,
+
+            ForbiddenQRs = 0x4CE724,
+
+            NoOutlines = 0x32FBA0,
+
+            CRC16 = 0x26242C,
+            DexDataAllocator = 0x5500,
+            aeabi_memcpy = 0x1FF074,
+            GenerateDexDisplayData = 0x2E0090,
+
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = true,
+            IsUltraV1_1 = true
+        };
+
+        private static readonly Offsets UltraS_Offsets_1_1 = new Offsets
+        {
+            CTRIsDebugMode = 0x4DE0,
+
+            DecryptQRCodeStart = 0x2E03AC,
+            DecryptQRCodeEnd = 0x2E0444,
+
+            AnalyzeQRBinaryStart = 0x2E0870,
+            AnalyzeQRBinaryEnd = 0x2E0DE8,
+            QRReaderSaveDataBatteryQuery = 0x3553A4,
+
+            QRReaderSaveDataIsRegisteredData = 0x3C5A04,
+
+            ForbiddenQRs = 0x4CE724,
+
+            NoOutlines = 0x32FB9C,
+
+            CRC16 = 0x26242C,
+            DexDataAllocator = 0x5500,
+            aeabi_memcpy = 0x1FF074,
+            GenerateDexDisplayData = 0x2E008C,
+
+            GetSingletonAccessorInstance = 0x48B4,
+
+            IsUltra = true,
+            IsUltraV1_1 = true
         };
 
         static uint GetARMBranch(uint from, uint to)
         {
-            // Fuck ARM Branches
             if (to >= from + 8)
             {
                 return (0xEA000000 | (((to - (from + 8)) >> 2) & 0xFFFFFF));
@@ -166,7 +254,6 @@ namespace SMPatcher
 
         static uint GetARMBranchNE(uint from, uint to)
         {
-            // Fuck ARM Branches
             if (to >= from + 8)
             {
                 return (0x1A000000 | (((to - (from + 8)) >> 2) & 0xFFFFFF));
@@ -179,7 +266,6 @@ namespace SMPatcher
 
         static uint GetARMBranchLink(uint from, uint to)
         {
-            // Fuck ARM Branches
             if (to >= from + 8)
             {
                 return (0xEB000000 | (((to - (from + 8)) >> 2) & 0xFFFFFF));
@@ -224,7 +310,7 @@ namespace SMPatcher
                 return;
             }
 
-            var old_code = (byte[]) code.Clone();
+            var old_code = (byte[])code.Clone();
 
             var dir = Path.GetDirectoryName(args[0]);
             var fn = Path.GetFileNameWithoutExtension(args[0]);
@@ -265,12 +351,22 @@ namespace SMPatcher
             else if (hash.SequenceEqual(Resources.ultra_moon_hash_1_0))
             {
                 Console.WriteLine("Pokemon Ultra Moon v1.0 detected");
-                Offsets = Ultra_Offsets_1_0;
+                Offsets = UltraM_Offsets_1_0;
             }
             else if (hash.SequenceEqual(Resources.ultra_sun_hash_1_0))
             {
                 Console.WriteLine("Pokemon Ultra Sun v1.0 detected");
-                Offsets = Ultra_Offsets_1_0;
+                Offsets = UltraM_Offsets_1_0;
+            }
+            else if (hash.SequenceEqual(Resources.ultra_moon_hash_1_1))
+            {
+                Console.WriteLine("Pokemon Ultra Moon v1.1 detected");
+                Offsets = UltraM_Offsets_1_1;
+            }
+            else if (hash.SequenceEqual(Resources.ultra_sun_hash_1_1))
+            {
+                Console.WriteLine("Pokemon Ultra Sun v1.1 detected");
+                Offsets = UltraM_Offsets_1_1;
             }
             else
             {
@@ -279,14 +375,20 @@ namespace SMPatcher
             }
 
             Resources.debug_stub.CopyTo(code, Offsets.CTRIsDebugMode);
-
             if (Offsets.IsUltra) // Patch up static memory clobber.
             {
                 for (var i = 0; i < Resources.debug_stub.Length; i += 4)
                 {
                     if (BitConverter.ToUInt32(Resources.debug_stub, i) == 0x006A1080)
                     {
-                        BitConverter.GetBytes(0x00667180).CopyTo(code, Offsets.CTRIsDebugMode + i);
+                        if (Offsets.IsUltraV1_1)
+                        {
+                            BitConverter.GetBytes(0x00669180).CopyTo(code, Offsets.CTRIsDebugMode + i);
+                        }
+                        else
+                        {
+                            BitConverter.GetBytes(0x00667180).CopyTo(code, Offsets.CTRIsDebugMode + i);
+                        }
                     }
                 }
             }
@@ -304,7 +406,7 @@ namespace SMPatcher
                     {
                         // LDR R1, [SP, #0x98]
                         BitConverter.GetBytes(0xE59D1098).CopyTo(code, Offsets.QRReaderSaveDataBatteryQuery + i);
-                    } 
+                    }
                 }
             }
             Resources.qr_is_registered.CopyTo(code, Offsets.QRReaderSaveDataIsRegisteredData);
